@@ -20,7 +20,10 @@ function drawCir(x,y,color, opacity, radius, svg){
     //this will append a circle in the right spot
     var cir = svg.append("circle")
        .attr('r', radius)
-       .attr('transform', 'translate(' + [x, y] + ')') 
+       .attr('cx', x) 
+       .attr('cy', y) 
        .attr('fill', color)
-       .attr('fill-opacity', opacity);
+       .attr('fill-opacity', opacity)
+       .attr('stroke-width', "1px")
+       .attr('stroke-color', black);
 }
