@@ -13,17 +13,13 @@ function longLatProjection(long, lat){
     return projection([long, lat])
 }
 
-function drawWorld(error, countries) {
-    var width = 1000;
-    var height = 500;
-
-    var projection = d3.geoEquirectangular()
-        .fitExtent([[0,0], [width, height]], countries);
-    
+function drawWorld(projection, countries){
     var geoGenerator = d3.geoPath()
         .projection(projection);
 
-    var paths = d3.select('svg')
+    var svg = d3.select('svg')
+
+    var paths = svg
         .selectAll('path')
         .data(countries.features)
         .enter()
@@ -31,5 +27,4 @@ function drawWorld(error, countries) {
         .attr('country', function(d, i) {
             return countries.features[i].properties.name_long;})
         .attr('d', geoGenerator);
-    return;
 }
