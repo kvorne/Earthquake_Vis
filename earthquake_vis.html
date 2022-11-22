@@ -30,7 +30,7 @@
 			}
 
 			path:hover {
-			  fill: orange;
+			  fill: rgb(177, 78, 78);
 			}
 		</style>
 	</head>
@@ -44,32 +44,13 @@
         	var width = 1000;
         	var height = 500;
 
-			d3.json("map.json", drawUSA);
         	d3.csv("earthquakes.csv", drawVis);
 
         	function drawVis(error, earthquakes) {
+                d3.json("map.json", drawWorld);
                 printData(earthquakes);
 			}
 
-			
-
-        	function drawUSA(error, states) {
-        		var width = 1000;
-        		var height = 500;
-
-	        	var projection = d3.geoEquirectangular()
-	        		.fitExtent([[0,0], [width, height]], states);
-	        	
-				var geoGenerator = d3.geoPath()
-					.projection(projection);
-
-				var paths = d3.select('svg')
-					.selectAll('path')
-					.data(states.features)
-					.enter()
-					.append('path')
-					.attr('d', geoGenerator);
-			}
 
         </script>
 
