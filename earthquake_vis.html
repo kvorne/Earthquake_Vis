@@ -7,6 +7,7 @@
         <script src="map.js"></script>
         <script src="circles.js"></script>
         <script src="data_filter.js"></script>
+        <script src="animations.js"></script>
 
 		<style>
 			h1 {
@@ -25,12 +26,8 @@
 			}
 
             path {
-                fill: #ddd;
                 stroke: #aaa;
-            }
-
-            path:hover {
-                fill: rgb(177, 78, 78);
+                fill: none;
             }
 
 		</style>
@@ -48,10 +45,14 @@
         	d3.csv("earthquakes.csv", drawVis);
 
         	function drawVis(error, earthquakes) {
-                var svg = d3.select("svg")
                 d3.json("map.json", drawWorld);
-                printData(earthquakes);
-                drawCir(10, 10, "rgb(118, 0, 8)", "70%", 3.5, svg);
+                var svg = d3.select("svg")
+                fullYear(svg, 2002, earthquakes);
+                //printData(earthquakes);
+                // var lat = 41.699280;
+                // var long = -86.238899;
+                // var coordinates = longLatProjection(long, lat);
+                // drawCir(coordinates[0], coordinates[1], "rgb(118, 0, 8)", "70%", 3.5, svg);
 			}
 
 

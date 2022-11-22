@@ -1,15 +1,20 @@
 function getDay(date){
-    return date.split("/")[0]
+    return String(date).split("/")[0]
 }
 
 function getMonth(date){
-    return date.split("/")[1]
+    return String(date).split("/")[1]
 }
 
 function getYear(date){
-    return date.split("/")[2]
+    return String(date).split("/")[2]
 }
 
 function dataFrame(date){
 
+}
+
+function daysOutOf366(date){
+    date = new Date(date);
+    return (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - Date.UTC(date.getFullYear(), 0, 0)) / 24 / 60 / 60 / 1000;
 }

@@ -2,8 +2,15 @@ function printData(data){
     console.log(data)
 }
 
-function longLatProjection(long, Lat){
+function longLatProjection(long, lat){
     //plz fix thx
+    var width = 1000;
+    var height = 500;
+
+    var projection = d3.geoEquirectangular()
+        .scale(height / Math.PI)
+        .translate([width / 2, height / 2]);
+    return projection([long, lat])
 }
 
 function drawWorld(error, countries) {
@@ -24,4 +31,5 @@ function drawWorld(error, countries) {
         .attr('country', function(d, i) {
             return countries.features[i].properties.name_long;})
         .attr('d', geoGenerator);
+    return;
 }
