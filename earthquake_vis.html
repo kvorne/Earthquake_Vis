@@ -45,14 +45,29 @@
         	d3.csv("earthquakes.csv", drawVis);
 
         	function drawVis(error, earthquakes) {
-                d3.json("map.json", drawWorld);
-                var svg = d3.select("svg")
-                fullYear(svg, 2002, earthquakes);
-                //printData(earthquakes);
-                // var lat = 41.699280;
-                // var long = -86.238899;
-                // var coordinates = longLatProjection(long, lat);
-                // drawCir(coordinates[0], coordinates[1], "rgb(118, 0, 8)", "70%", 3.5, svg);
+                d3.json("map.json", buildMap);
+
+
+				function buildMap(error, countries) {
+					var width = 1000;
+					var height = 500;
+
+					var projection = d3.geoEquirectangular()
+						.fitExtent([[0,0], [width, height]], countries);
+					
+					var svg = d3.select('svg')
+
+					drawWorld(projection, countries)
+
+					// var lat = 41.699280;
+					// var long = -86.238899;
+					// var coordinates = projection([long, lat]);
+					// drawCir(coordinates[0], coordinates[1], "rgb(118, 0, 8)", "70%", 3.5, true, svg);
+					
+					fullYear(svg, 2002, earthquakes, projection);
+                	//printData(earthquakes);
+				}
+                
 			}
 
 

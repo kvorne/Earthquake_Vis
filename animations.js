@@ -2,7 +2,7 @@ function overTime(){
 
 }
 
-function fullYear(svg, year, earthquakes){
+function fullYear(svg, year, earthquakes, projection){
     console.log(year);
     const startYear = (element) => getYear(element.Date) == year;
     start_index = earthquakes.findIndex(startYear, year);
@@ -13,7 +13,7 @@ function fullYear(svg, year, earthquakes){
     let i = start_index;
     while(getYear(earthquakes[i].Date) == year){
         curr = earthquakes[i];
-        let coordinates = longLatProjection(curr.Longitude, curr.Latitude);
+        let coordinates = projection([curr.Longitude, curr.Latitude]);
 
         drawCir(
             coordinates[0], 
