@@ -2,12 +2,8 @@ function printData(data){
     console.log(data)
 }
 
-function printMap(mapData){
-    pass
-}
-
-function getColor(mapDate, quakeDate){
-    
+function longLatProjection(long, Lat){
+    //plz fix thx
 }
 
 function drawWorld(error, countries) {
@@ -25,5 +21,7 @@ function drawWorld(error, countries) {
         .data(countries.features)
         .enter()
         .append('path')
+        .attr('country', function(d, i) {
+            return countries.features[i].properties.name_long;})
         .attr('d', geoGenerator);
 }
