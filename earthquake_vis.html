@@ -18,6 +18,20 @@
                 margin-bottom:20px;
                 font-family: 'Roboto';
             }
+			body {
+			  font-family: "Helvetica Neue", Helvetica, sans-serif;
+			  font-size: 14px;
+			  color: #333;
+			}
+
+			path {
+			  fill: #ddd;
+			  stroke: #aaa;
+			}
+
+			path:hover {
+			  fill: orange;
+			}
 		</style>
 	</head>
 
@@ -30,10 +44,31 @@
         	var width = 1000;
         	var height = 500;
 
+			d3.json("map.json", drawUSA);
         	d3.csv("earthquakes.csv", drawVis);
 
         	function drawVis(error, earthquakes) {
                 printData(earthquakes);
+			}
+
+			
+
+        	function drawUSA(error, states) {
+        		var width = 1000;
+        		var height = 500;
+
+	        	var projection = d3.geoEquirectangular()
+	        		.fitExtent([[0,0], [width, height]], states);
+	        	
+				var geoGenerator = d3.geoPath()
+					.projection(projection);
+
+				var paths = d3.select('svg')
+					.selectAll('path')
+					.data(states.features)
+					.enter()
+					.append('path')
+					.attr('d', geoGenerator);
 			}
 
         </script>
