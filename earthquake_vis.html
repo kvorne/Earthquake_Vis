@@ -57,14 +57,10 @@
 					
 					var svg = d3.select('svg')
 
-					drawWorld(projection, countries)
-
-					// var lat = 41.699280;
-					// var long = -86.238899;
-					// var coordinates = projection([long, lat]);
-					// drawCir(coordinates[0], coordinates[1], "rgb(118, 0, 8)", "70%", 3.5, true, svg);
+					drawWorld(projection, countries);
 					
-					fullYear(svg, 2002, earthquakes, projection);
+                    //overTime(svg, "08/17/2000", earthquakes, projection)
+                    fullYear(svg, 1998, earthquakes, projection);
                 	//printData(earthquakes);
 				}
                 

@@ -3,7 +3,6 @@ function printData(data){
 }
 
 function longLatProjection(long, lat){
-    //plz fix thx
     var width = 1000;
     var height = 500;
 
