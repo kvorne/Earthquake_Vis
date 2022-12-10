@@ -5,7 +5,6 @@ function overTime(svg, date, earthquakes, projection){
 }
 
 function drawFrame(svg, date, earthquakes, projection){
-    var circles = svg.selectAll("circle");
     circles.remove();
     var earliest = new Date(date);
     var currDate = new Date(date);
@@ -44,7 +43,7 @@ function fullYear(svg, year, earthquakes, projection){
 
     let i = start_index;
     while(getYear(earthquakes[i].Date) == year){
-        curr = earthquakes[i];
+        curr = earthquakes[i];;
         let coordinates = projection([curr.Longitude, curr.Latitude]);
 
         drawCir(
@@ -60,4 +59,28 @@ function fullYear(svg, year, earthquakes, projection){
         i++;
     }
 
+}
+
+function allTime(svg, year, earthquakes, projection){
+    var circles = svg.selectAll("circle");
+    circles.remove();
+    const startYear = (element) => getYear(element.Date) == year;
+    start_index = earthquakes.findIndex(startYear, year);
+
+    for (let i = 0; i < earthquakes.length; i++){
+        curr = earthquakes[i];
+        let coordinates = projection([curr.Longitude, curr.Latitude]);
+
+        drawCir(
+            coordinates[0], 
+            coordinates[1], 
+            getColor(daysOutOf366(curr.Date)), 
+            "20%",
+            getRadius(curr.Magnitude, 1),
+            false, 
+            svg
+        );
+
+        i++;
+    }
 }
