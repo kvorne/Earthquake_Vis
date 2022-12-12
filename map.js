@@ -16,7 +16,7 @@ function drawWorld(projection, countries){
     var geoGenerator = d3.geoPath()
         .projection(projection);
 
-    var svg = d3.select('svg').select('g')
+    var svg = d3.select('svg').select('g.map')
 
     var paths = svg
         .selectAll('path')
@@ -32,8 +32,9 @@ function showPlates(){
     let svg = d3.select("svg")
     
     svg.selectAll("circle").remove()
-    svg.select("g").remove()
+    svg.select("g.map").remove()
     svg.append("g")
+        .attr("class", "map")
     d3.json("plates.json", buildMap)
     plates = true
 }
@@ -42,8 +43,9 @@ function showMap(){
     let svg = d3.select("svg")
     
     svg.selectAll("circle").remove()
-    svg.select("g").remove()
+    svg.select("g.map").remove()
     svg.append("g")
+    .attr("class", "map")
     d3.json("map.json", buildMap)
     plates = false
 }
