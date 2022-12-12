@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Earthquakes from 1965 to 2016</title>
-		<!-- <script type="text/javascript" src="d3/d3.min.js"></script>  -->
+		<title>Earthquakes by Year</title>
 		<script src="https://d3js.org/d3.v4.min.js"></script>
         <script src="map.js"></script>
         <script src="circles.js"></script>
         <script src="data_filter.js"></script>
         <script src="animations.js"></script>
+		<script src="drawfunc.js"></script>
 
 		<style>
 			h1 {
@@ -34,26 +34,38 @@
 	</head>
 
 	<body>
-        <h1>Earthquakes from 1965 to 2016</h1>
-		<svg width="1000" height="500">
+        <h1>Earthquakes by Year</h1>
+		<svg width="1200" height="500">
+			<g class="map"></g>
+			<g class="legend"></g>
 		</svg>
+		<br>
+		<select id="select" onchange="drawYear()"></select>
 
 		<p><a href="/index.html">Home</a></p>
 
         <script type="text/javascript">
         	var width = 1000;
         	var height = 500;
+			makeToolTip();
+			makeYearLegend();
+			d3.csv("earthquakes.csv", buildDropdown);
 
-        	d3.csv("earthquakes.csv", drawVis);
+			drawYear();
+        	function drawYear(){
+				d3.csv("earthquakes.csv", drawVis);
+			}
 
         	function drawVis(error, earthquakes) {
                 d3.json("map.json", buildMap);
 
 
 				function buildMap(error, countries) {
+					console.log(earthquakes);
 					var width = 1000;
 					var height = 500;
-
+					var sel = document.getElementById('select');
+					var year = sel.options[select.selectedIndex].value;
 					var projection = d3.geoEquirectangular()
 						.fitExtent([[0,0], [width, height]], countries);
 					
@@ -61,10 +73,37 @@
 
 					drawWorld(projection, countries);
 					
-                    //overTime(svg, "08/17/2000", earthquakes, projection)
-                    //fullYear(svg, 1998, earthquakes, projection);
-					allTime(svg, 1998, earthquakes, projection);
-                	//printData(earthquakes);
+                    fullYear(svg, year, earthquakes, projection);
+
+					function fullYear(svg, year, earthquakes, projection){
+						var circles = svg.selectAll("circle");
+						circles.remove();
+						console.log(year);
+						const startYear = (element) => getYear(element.Date) == year;
+						start_index = earthquakes.findIndex(startYear, year);
+						console.log(getYear(earthquakes[0].Date));
+
+						let i = start_index;
+						while(getYear(earthquakes[i].Date) == year){
+							curr = earthquakes[i];;
+							let coordinates = projection([curr.Longitude, curr.Latitude]);
+
+							drawCir(
+								coordinates[0], 
+								coordinates[1], 
+								getColor(daysOutOf366(curr.Date)), 
+								"20%",
+								getRadius(curr.Magnitude, 1),
+								false, 
+								svg,
+								curr.Date,
+								curr.Magnitude
+							);
+
+							i++;
+						}
+
+					}
 				}
                 
 			}

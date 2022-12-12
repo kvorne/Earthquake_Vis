@@ -14,8 +14,6 @@ function getRadius(magnitude, scaleFactor){
 }
 
 function drawCir(x,y,color, opacity, radius, isStroke, svg, date, mag){
-    var tran = d3.transition()
-			    .duration(300);
     //this will append a circle in the right spot
     var cir = svg.append("circle")
         .attr('cx', x) 
@@ -28,12 +26,10 @@ function drawCir(x,y,color, opacity, radius, isStroke, svg, date, mag){
             let tooltip = d3.select("g.tooltip")
             console.log(tooltip)
             tooltip.style("display", "inline");
-            //var text = popNums ? String(((d[1] - d[0]) * popData[d.data["year"]]).toFixed(0)) : String(((d[1] - d[0]) * 100).toFixed(2)) + "%"
             tooltip.select("text.date").text(`${date}`);
             tooltip.select("text.mag").text(`Magnitude ${mag}`);
         })
         .on('mouseout', function() {
-        //.on('mouseleave', function() {
             let tooltip = d3.select("g.tooltip")
             tooltip.style("display", "none");
         })
@@ -44,15 +40,16 @@ function drawCir(x,y,color, opacity, radius, isStroke, svg, date, mag){
             tooltip.attr('transform', "translate(" + xPos + "," + yPos + ")");
             
         });
-
-    cir.transition(tran).attr('r', radius);
-       
        
 
     if (isStroke) {
+        var tran = d3.transition()
+            .duration(300);
         cir.attr('stroke-width', ".5px");
+        cir.transition(tran).attr('r', radius);
     } else {
         cir.attr('stroke-width', "0px");
+        cir.attr('r', radius);
     }
 
     return cir;

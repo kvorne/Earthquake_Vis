@@ -1,8 +1,10 @@
-var framelength = 300
+var framelength = 300;
 var pauseA = false;
 var currDate = 0;
 
 function pauseAnimation(){
+    d3.select("#pause").style("display", "none");
+    d3.select("#resume").style("display", "");
     pauseA = true;
 }
 
@@ -134,34 +136,6 @@ function drawFrame(svg, date, earthquakes, projection){
     
 }
 
-function fullYear(svg, year, earthquakes, projection){
-    var circles = svg.selectAll("circle");
-    circles.remove();
-    const startYear = (element) => getYear(element.Date) == year;
-    start_index = earthquakes.findIndex(startYear, year);
-
-    let i = start_index;
-    while(getYear(earthquakes[i].Date) == year){
-        curr = earthquakes[i];;
-        let coordinates = projection([curr.Longitude, curr.Latitude]);
-
-        drawCir(
-            coordinates[0], 
-            coordinates[1], 
-            getColor(daysOutOf366(curr.Date)), 
-            "20%",
-            getRadius(curr.Magnitude, 1),
-            false, 
-            svg,
-            curr.Date,
-            curr.Magnitude
-        );
-
-        i++;
-    }
-
-}
-
 function allTime(svg, year, earthquakes, projection){
     var circles = svg.selectAll("circle");
     circles.remove();
@@ -185,5 +159,32 @@ function allTime(svg, year, earthquakes, projection){
         );
 
         i++;
+    }
+}
+
+function updateMap(){
+    d3.csv("earthquakes.csv", drawYear);
+
+    function drawYear(error, earthquakes) {
+        var circles = svg.selectAll("circle");
+        circles.remove();
+        d3.json("map.json", buildMap);
+
+
+        function buildMap(error, countries) {
+            var width = 1000;
+            var height = 500;
+            var projection = d3.geoEquirectangular()
+                .fitExtent([[0,0], [width, height]], countries);
+            
+            var svg = d3.select('svg')
+
+            drawWorld(projection, countries);
+            
+            //overTime(svg, "08/17/2000", earthquakes, projection)
+            fullYear(svg, 1998, earthquakes, projection);
+            //allTime(svg, 1998, earthquakes, projection);
+        }
+        
     }
 }

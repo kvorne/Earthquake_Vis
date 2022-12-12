@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Earthquakes Viz</title>
-		<!-- <script type="text/javascript" src="d3/d3.min.js"></script>  -->
+		<title>Earthquake Vis Animation</title>
 		<script src="https://d3js.org/d3.v4.min.js"></script>
         <script src="map.js"></script>
         <script src="circles.js"></script>
@@ -35,23 +34,20 @@
 	</head>
 
 	<body>
-        <h1>Earthquake Viz</h1>
+        <h1>Earthquake Vis Animation</h1>
         <p id="date"></p>
 		<svg width="1200" height="500">
             <g class="map"></g>
+            <g class="legend"></g>
 		</svg>
-
+        <br>
         <select id="select" onchange="clearMap()"></select>
         <br>
-
         <button onclick="animateYear()">Animate</button>
-        <button onclick="pauseAnimation()">Pause</button>
-        <button onclick="resumeAnimation()">Resume</button>
+        <button id="pause" onclick="pauseAnimation()">Pause</button>
+        <button style = "display: none" id = "resume" onclick="resumeAnimation()">Resume</button>
         <br>
-
-        <button onclick="drawYear()">Show All</button>
-        <br>
-        <button id="showPlates" onclick="showPlates()">Show Techtonic Plates</button>
+        <button id="showPlates" onclick="showPlates()">Show Tectonic Plates</button>
         <button id="showMap" onclick="showMap()">Show World Map</button>
 
 		<p><a href="/index.html">Home</a></p>
@@ -64,10 +60,12 @@
             var plates = false;
 
             makeToolTip();
-            
+            makeAnimationLegend();
 
             function resumeAnimation(){
                 resA();
+                d3.select("#pause").style("display", "");
+                d3.select("#resume").style("display", "none");
                 d3.csv("earthquakes.csv", animateVis);
             }
 
@@ -103,6 +101,11 @@
                 resetAnimation();
                 await clearMap()
                 d3.csv("earthquakes.csv", animateVis);
+            }
+
+            function printAll(){
+                resetAnimation();
+                d3.csv("earthquakes.csv", allTime);
             }
 
         	
