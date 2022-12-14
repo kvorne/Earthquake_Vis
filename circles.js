@@ -23,13 +23,18 @@ function drawCir(x,y,color, opacity, radius, isStroke, svg, date, mag){
         .attr('stroke', "black")
         .attr("r", 0)
         .on('mouseover', function(d, i) {
+            if(!isStroke){
+                cir.style("opacity", "100%");
+            }
             let tooltip = d3.select("g.tooltip")
-            console.log(tooltip)
             tooltip.style("display", "inline");
             tooltip.select("text.date").text(`${date}`);
             tooltip.select("text.mag").text(`Magnitude ${mag}`);
         })
         .on('mouseout', function() {
+            if(!isStroke){
+                cir.style("opacity", opacity);
+            } 
             let tooltip = d3.select("g.tooltip")
             tooltip.style("display", "none");
         })

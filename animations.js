@@ -51,8 +51,6 @@ async function overTime(svg, date, earthquakes, projection){
     var tran = d3.transition()
 		.duration(framelength);
 
-    // var circles = svg.selectAll("circle");
-    // circles.remove();
     let day = new Date(date)
     day.setDate(day.getDate() + currDate)
     let numdays = 365
@@ -90,18 +88,18 @@ function drawFrame(svg, date, earthquakes, projection){
     start_index = earthquakes.findIndex(startDate, earliest);
 
     var tran = d3.transition()
-							.duration(framelength);
+        .duration(framelength);
 
     let circles = svg.selectAll("circle")
-                    .each(function(d, i) {
-                        let c = d3.select(this)
-                        let op = c.attr("opacity")
-                        op = String(Number(op.slice(0,-1)) - 3) + "%"
-                        c.transition(tran).attr("opacity", op)
-                        if(op <= 0){
-                            c.remove()
-                        }
-                    })
+        .each(function(d, i) {
+            let c = d3.select(this)
+            let op = c.attr("opacity")
+            op = String(Number(op.slice(0,-1)) - 3) + "%"
+            c.transition(tran).attr("opacity", op)
+            if(op <= 0){
+                c.remove()
+            }
+        })
 
     let i = start_index;
 
@@ -115,7 +113,7 @@ function drawFrame(svg, date, earthquakes, projection){
             let cir = drawCir(
                 coordinates[0], 
                 coordinates[1], 
-                "maroon", 
+                "rgb(118, 0, 8)", 
                 getOpacity(((latest - new Date(curr.Date))/86400000)),
                 getRadius(curr.Magnitude, 1),
                 true, 
@@ -181,9 +179,7 @@ function updateMap(){
 
             drawWorld(projection, countries);
             
-            //overTime(svg, "08/17/2000", earthquakes, projection)
             fullYear(svg, 1998, earthquakes, projection);
-            //allTime(svg, 1998, earthquakes, projection);
         }
         
     }
