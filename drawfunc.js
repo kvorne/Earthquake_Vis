@@ -202,6 +202,40 @@ function makeYearLegend(){
         .text("December");
 }
 
+function makeCompareLegened(){
+    legend = d3.select("svg .legend");
+
+    var year = document.getElementById('select').options[select.selectedIndex].value;
+
+    var ind1 = document.getElementById('secondselect').options.selectedIndex
+    var year1 = document.getElementById('secondselect').options[ind1].value
+
+
+    var label = legend.append("text")
+        .attr('x', 1040)
+        .attr('y', 20)
+        .text(year);
+
+    var square = legend.append('rect')
+        .attr('x', 1080)
+        .attr('y', 10)
+        .attr('width', 10)
+        .attr('height', 10)
+        .attr('fill', 'blue');
+
+    var label1 = legend.append("text")
+        .attr('x', 1040)
+        .attr('y', 40)
+        .text(year1);
+
+    var square1 = legend.append('rect')
+        .attr('x', 1080)
+        .attr('y', 30)
+        .attr('width', 10)
+        .attr('height', 10)
+        .attr('fill', 'red');
+}
+
 function fullYear(svg, year, earthquakes, projection, scaleColor){
     if(scaleColor() != 'red'){
         var circles = svg.selectAll("circle");

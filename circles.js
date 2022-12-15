@@ -10,7 +10,7 @@ function getColor(date){
 }
 
 function getRadius(magnitude, scaleFactor){
-    return (Math.pow(magnitude*scaleFactor, 3)/50);
+    return (Math.pow(magnitude*scaleFactor, 4.5)/570);
 }
 
 function drawCir(x,y,color, opacity, radius, isStroke, svg, date, mag){

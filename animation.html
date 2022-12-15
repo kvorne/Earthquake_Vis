@@ -113,16 +113,31 @@
             d3.csv("earthquakes.csv", buildDropdown)
 
             function drawYear(){
+                let legend = d3.select('svg').select('g.legend')
+                
+                legend.selectAll('rect').remove()
+                legend.selectAll('text').remove()
+
                 makeYearLegend()
         	    d3.csv("earthquakes.csv", drawVis);
             }
 
             function compare(){
+                let legend = d3.select('svg').select('g.legend')
+                
+                legend.selectAll('rect').remove()
+                legend.selectAll('text').remove()
+
+                makeCompareLegened()
                 d3.csv("earthquakes.csv", drawCompare);
             }
 
             async function animateYear(){
-                let legend = d3.select('svg .legned').remove()
+                let legend = d3.select('svg').select('g.legend')
+                
+                legend.selectAll('rect').remove()
+                legend.selectAll('text').remove()
+
                 makeAnimationLegend();
                 resetAnimation();
                 await clearMap()
