@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Earthquakes from 1965 to 2016</title>
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="map.js"></script>
+        <script src="circles.js"></script>
+        <script src="data_filter.js"></script>
+        <script src="animations.js"></script>
+        <script src="drawfunc.js"></script>
+
+		<style>
+			h1 {
+                font-family: 'Futura';
+                color: rgb(118, 0, 8);
+            }
+
+            body{
+                margin-left: 50px;
+                margin-right: 50px;
+                margin-top: 20px;
+                margin-bottom:20px;
+                font-family: 'Roboto';
+			    font-size: 14px;
+			    color: #333;
+			}
+
+            path {
+                stroke: #aaa;
+                fill: none;
+            }
+
+		</style>
+	</head>
+
+	<body>
+        <h1>Earthquake Vis Animation</h1>
+        <p id="date"></p>
+		<svg width="1200" height="500">
+            <g class="map"></g>
+            <g class="legend"></g>
+		</svg>
+        <br>
+        <select id="select" onchange="clearMap()"></select>
+        <br>
+        <button onclick="animateYear()">Animate</button>
+        <button id="pause" onclick="pauseAnimation()">Pause</button>
+        <button style = "display: none" id = "resume" onclick="resumeAnimation()">Resume</button>
+        <br>
+        <button id="showPlates" onclick="showPlates()">Show Tectonic Plates</button>
+        <button id="showMap" onclick="showMap()">Show World Map</button>
+
+		<p><a href="/index.html">Home</a></p>
+
+
+
+        <script type="text/javascript">
+        	var width = 1000;
+        	var height = 500;
+            var plates = false;
+
+            makeToolTip();
+            makeAnimationLegend();
+
+            function resumeAnimation(){
+                resA();
+                d3.select("#pause").style("display", "");
+                d3.select("#resume").style("display", "none");
+                d3.csv("earthquakes.csv", animateVis);
+            }
+
+
+            async function clearMap(){
+                var tran = d3.transition()
+							.duration(300);
+
+                let circles = d3.selectAll("circle")
+                
+                circles.transition(tran)
+                    .attr("r", 0)
+
+                const delay = async (ms = 300) => new Promise(resolve => setTimeout(resolve, ms))
+                await delay()
+                circles.remove()
+            }
+
+
+            d3.json("map.json", buildMap);
+            
+
+            
+            
+            
+            d3.csv("earthquakes.csv", buildDropdown)
+
+            function drawYear(){
+        	    d3.csv("earthquakes.csv", drawVis);
+            }
+
+            async function animateYear(){
+                resetAnimation();
+                await clearMap()
+                d3.csv("earthquakes.csv", animateVis);
+            }
+
+            function printAll(){
+                resetAnimation();
+                d3.csv("earthquakes.csv", allTime);
+            }
+
+        	
+
+        </script>
+
+	</body>
+        
+
+	</body>
+</html>

@@ -10,10 +10,6 @@ function getYear(date){
     return String(date).split("/")[2]
 }
 
-function dataFrame(date){
-
-}
-
 function daysOutOf366(date){
     date = new Date(date);
     return (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - Date.UTC(date.getFullYear(), 0, 0)) / 24 / 60 / 60 / 1000;
