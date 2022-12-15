@@ -45,16 +45,56 @@ function drawVis(error, earthquakes) {
     function doThing(error, countries){
         var projection = d3.geoEquirectangular()
         .fitExtent([[0,0], [width, height]], countries);
-
+        console.log("here")
         //let sel = document.getElementById('select')
         //overTime(svg, `01/01/${sel.options[select.selectedIndex].value}`, earthquakes, projection)
-        //fullYear(svg, 1998, earthquakes, projection);
+        var year = document.getElementById('select').options[select.selectedIndex].value;
+        fullYear(svg, year, earthquakes, projection, getColor);
         //allTime(svg, 1998, earthquakes, projection);
         //printData(earthquakes);
     }
     
     
 }
+
+function primColor(){
+    return 'blue';
+}
+
+function secColor(){
+    return 'red';
+}
+
+function drawCompare(error, earthquakes) {
+    var svg = d3.select('svg')
+    
+    if(plates){
+        d3.json("plates.json", doThing);
+    }
+    else {
+        d3.json("map.json", doThing);
+    }
+    
+
+    function doThing(error, countries){
+        var projection = d3.geoEquirectangular()
+        .fitExtent([[0,0], [width, height]], countries);
+        //let sel = document.getElementById('select')
+        //overTime(svg, `01/01/${sel.options[select.selectedIndex].value}`, earthquakes, projection)
+        var year = document.getElementById('select').options[select.selectedIndex].value;
+        fullYear(svg, year, earthquakes, projection, primColor);
+
+        var ind1 = document.getElementById('secondselect').options.selectedIndex
+        var year1 = document.getElementById('secondselect').options[ind1].value//.options[select.selectedIndex].value;
+        console.log(year1)
+        fullYear(svg, year1, earthquakes, projection, secColor);
+        //allTime(svg, 1998, earthquakes, projection);
+        //printData(earthquakes);
+    }
+    
+    
+}
+
 
 function animateVis(error, earthquakes) {
     var svg = d3.select('svg')
@@ -160,4 +200,36 @@ function makeYearLegend(){
         .attr('x', 1040)
         .attr('y', 350)
         .text("December");
+}
+
+function fullYear(svg, year, earthquakes, projection, scaleColor){
+    if(scaleColor() != 'red'){
+        var circles = svg.selectAll("circle");
+        circles.remove();
+    }
+    //console.log(year);
+    const startYear = (element) => getYear(element.Date) == year;
+    start_index = earthquakes.findIndex(startYear, year);
+    //console.log(getYear(earthquakes[0].Date));
+
+    let i = start_index;
+    while(getYear(earthquakes[i].Date) == year){
+        curr = earthquakes[i];;
+        let coordinates = projection([curr.Longitude, curr.Latitude]);
+
+        drawCir(
+            coordinates[0], 
+            coordinates[1], 
+            scaleColor(daysOutOf366(curr.Date)), 
+            "20%",
+            getRadius(curr.Magnitude, 1),
+            false, 
+            svg,
+            curr.Date,
+            curr.Magnitude
+        );
+
+        i++;
+    }
+
 }

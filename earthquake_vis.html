@@ -75,35 +75,7 @@
 					
                     fullYear(svg, year, earthquakes, projection);
 
-					function fullYear(svg, year, earthquakes, projection){
-						var circles = svg.selectAll("circle");
-						circles.remove();
-						console.log(year);
-						const startYear = (element) => getYear(element.Date) == year;
-						start_index = earthquakes.findIndex(startYear, year);
-						console.log(getYear(earthquakes[0].Date));
-
-						let i = start_index;
-						while(getYear(earthquakes[i].Date) == year){
-							curr = earthquakes[i];;
-							let coordinates = projection([curr.Longitude, curr.Latitude]);
-
-							drawCir(
-								coordinates[0], 
-								coordinates[1], 
-								getColor(daysOutOf366(curr.Date)), 
-								"20%",
-								getRadius(curr.Magnitude, 1),
-								false, 
-								svg,
-								curr.Date,
-								curr.Magnitude
-							);
-
-							i++;
-						}
-
-					}
+					
 				}
                 
 			}

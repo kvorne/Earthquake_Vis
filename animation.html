@@ -41,7 +41,21 @@
             <g class="legend"></g>
 		</svg>
         <br>
-        <select id="select" onchange="clearMap()"></select>
+        <div>
+            <p>Primary Year</p>
+            <select id="select" onchange="newYear()"></select>
+            <button onclick="drawYear()">Show Primary Year</button>
+        </div>
+        
+        <div>
+            <p>Secondary Year</p>
+            <select id="secondselect" class="second"></select>
+            <button onclick="compare()">Compare Years</button>
+        </div>
+       
+        <br>
+        
+        
         <br>
         <button onclick="animateYear()">Animate</button>
         <button id="pause" onclick="pauseAnimation()">Pause</button>
@@ -60,7 +74,7 @@
             var plates = false;
 
             makeToolTip();
-            makeAnimationLegend();
+            
 
             function resumeAnimation(){
                 resA();
@@ -84,6 +98,11 @@
                 circles.remove()
             }
 
+            async function newYear() {
+                await clearMap();
+                drawYear();
+            }
+
 
             d3.json("map.json", buildMap);
             
@@ -94,10 +113,17 @@
             d3.csv("earthquakes.csv", buildDropdown)
 
             function drawYear(){
+                makeYearLegend()
         	    d3.csv("earthquakes.csv", drawVis);
             }
 
+            function compare(){
+                d3.csv("earthquakes.csv", drawCompare);
+            }
+
             async function animateYear(){
+                let legend = d3.select('svg .legned').remove()
+                makeAnimationLegend();
                 resetAnimation();
                 await clearMap()
                 d3.csv("earthquakes.csv", animateVis);
@@ -107,6 +133,7 @@
                 resetAnimation();
                 d3.csv("earthquakes.csv", allTime);
             }
+
 
         	
 

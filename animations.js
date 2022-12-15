@@ -33,7 +33,7 @@ function getYears(earthquakes){
 
 function buildDropdown(error, earthquakes){
     let years = getYears(earthquakes) 
-    let select = d3.select("select")
+    let select = d3.selectAll("select")
         
         
     years = Array.from(years)
@@ -43,7 +43,17 @@ function buildDropdown(error, earthquakes){
         .enter()
         .append("option")
         .attr("value", function(d, i) { return d; })
-        .text(function(d,i) {return d;})
+        .text(function(d,i) {return d;});
+
+    // select1 = d3.select("select.second")
+    // console.log(select1)
+    // select1
+    //     .selectAll("options")
+    //     .data(years)
+    //     .enter()
+    //     .append("option")
+    //     .attr("value", function(d, i) { return d; })
+    //     .text(function(d,i) {return d;})
 }
 
 async function overTime(svg, date, earthquakes, projection){

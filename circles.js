@@ -26,6 +26,9 @@ function drawCir(x,y,color, opacity, radius, isStroke, svg, date, mag){
             if(!isStroke){
                 cir.style("opacity", "100%");
             }
+            else {
+                cir.style("fill", "blue")
+            }
             let tooltip = d3.select("g.tooltip")
             tooltip.style("display", "inline");
             tooltip.select("text.date").text(`${date}`);
@@ -34,6 +37,9 @@ function drawCir(x,y,color, opacity, radius, isStroke, svg, date, mag){
         .on('mouseout', function() {
             if(!isStroke){
                 cir.style("opacity", opacity);
+            }
+            else {
+                cir.style("fill", color)
             } 
             let tooltip = d3.select("g.tooltip")
             tooltip.style("display", "none");
