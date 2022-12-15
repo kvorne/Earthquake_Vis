@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Earthquakes from 1965 to 2016</title>
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="map.js"></script>
+        <script src="circles.js"></script>
+        <script src="data_filter.js"></script>
+        <script src="animations.js"></script>
+        <script src="heatMap.js"></script>
+		<script src="drawFunc.js"></script>
+
+		<style>
+			h1 {
+                font-family: 'Futura';
+                color: rgb(118, 0, 8);
+            }
+
+            body{
+                margin-left: 50px;
+                margin-right: 50px;
+                margin-top: 20px;
+                margin-bottom:20px;
+                font-family: 'Roboto';
+			    font-size: 14px;
+			    color: #333;
+			}
+
+            path {
+                stroke: #aaa;
+                fill: white;
+            }
+
+		</style>
+	</head>
+
+	<body>
+        <h1>Earthquakes from 1965 to 2016</h1>
+		<svg width="1200" height="500">
+			<g class="map"></g>
+			<g class="legend"></g>
+		</svg>
+        <br>
+        <button id="printPaths" onclick="printPaths()">Make Heatmap</button>
+        <button id="printPaths" onclick="removeHeatmap()">Remove Heatmap</button>
+
+		<p><a href="/index.html">Home</a></p>
+
+        <script type="text/javascript">
+        	var width = 1000;
+        	var height = 500;
+
+        	d3.csv("earthquakes.csv", drawVis);
+
+        	function drawVis(error, earthquakes) {
+                d3.json("map.json", buildMap);
+                
+                function buildMap(error, countries) {
+					var width = 1000;
+					var height = 500;
+
+					var projection = d3.geoEquirectangular()
+						.fitExtent([[0,0], [width, height]], countries);
+					
+					var svg = d3.select('svg')
+                    
+
+					drawWorld(projection, countries);
+					
+                    //overTime(svg, "08/17/2000", earthquakes, projection)
+                    //fullYear(svg, 1998, earthquakes, projection);
+					allTime(svg, 1998, earthquakes, projection);
+					makeHeatMapLegend();
+                	//printData(earthquakes);
+				}
+                
+			}
+
+
+        </script>
+
+	</body>
+</html>
