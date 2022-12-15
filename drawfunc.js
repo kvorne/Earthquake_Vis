@@ -267,3 +267,42 @@ function fullYear(svg, year, earthquakes, projection, scaleColor){
     }
 
 }
+
+
+function makeHeatMapLegend(){
+    legend = d3.select("svg .legend");
+    var label = legend.append("text")
+        .text("Highest Risk")
+        .attr('x', 1040)
+        .attr('y', 20);
+
+    var colors = [ 'rgb(118, 0, 8)', 'white' ];
+    var grad = legend.append('defs')
+        .append('linearGradient')
+        .attr('id', 'grad')
+        .attr('x1', '0%')
+        .attr('x2', '0%')
+        .attr('y1', '0%')
+        .attr('y2', '100%');
+
+    grad.selectAll('stop')
+        .data(colors)
+        .enter()
+        .append('stop')
+        .style('stop-color', function(d){ return d; })
+        .attr('offset', function(d,i){
+            return 100 * (i / (colors.length - 1)) + '%';
+        });
+
+    legend.append('rect')
+        .attr('x', 1040)
+        .attr('y', 30)
+        .attr('width', 30)
+        .attr('height', 300)
+        .style('fill', 'url(#grad)');
+
+    var label2 = legend.append("text")
+        .attr('x', 1040)
+        .attr('y', 350)
+        .text("Lowest Risk");
+}

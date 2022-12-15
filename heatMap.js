@@ -32,7 +32,7 @@ function printPaths(){
         if(num == undefined){
             paths._groups[0][i].style.fillOpacity = "0%"
         } else {
-            paths._groups[0][i].style.fillOpacity = parseFloat(num/max*100) + "%"
+            paths._groups[0][i].style.fillOpacity = parseFloat(num/max*100)*.8+20 + "%"
         }
     }
 }
