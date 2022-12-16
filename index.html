@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Earthquakes from 1965 to 2016</title>
-		<!-- <script type="text/javascript" src="d3/d3.min.js"></script>  -->
+		<title>Earthquake Vis Animation</title>
 		<script src="https://d3js.org/d3.v4.min.js"></script>
         <script src="map.js"></script>
         <script src="circles.js"></script>
         <script src="data_filter.js"></script>
         <script src="animations.js"></script>
+        <script src="drawfunc.js"></script>
+        <script src="heatMap.js"></script>
+        
 
 		<style>
 			h1 {
@@ -34,12 +36,173 @@
 	</head>
 
 	<body>
-        <h1>Welcome to Earthquake Vis</h1>
-
-        <p><a href="/earthquake_vis.html">View Earthquakes by year</a> </p>
-        <p><a href="/animation.html">Animation</a> </p>
-        <p><a href="/combination.html">Combination</a> </p>
+        <h1>Earthquake Vis Animation</h1>
+        <p id="date"></p>
+		<svg width="1200" height="500" id="svg">
+            <g class="map"></g>
+            <g class="legend"></g>
+		</svg>
+        <br>
+        <h2>Configure Year</h2>
+        <div>
+            <p>Choose Year</p>
+            <select id="select" onchange="newYear()"></select>
+            <p>Choose Map</p>
+            <button id="showPlates" onclick="showPlates()">Show Tectonic Plates</button> or 
+            <button id="showMap" onclick="showMap()">Show World Map</button>
+            <p>Show Year</p>
+            <button onclick="drawYear()">Apply</button>
+        </div>
+        <br>
         
+        <h2>Animate Year</h2>
+        <button onclick="animateYear()">Animate</button>
+        <button id="pause" onclick="pauseAnimation()">Pause</button>
+        <button style = "display: none" id = "resume" onclick="resumeAnimation()">Resume</button>
+        <br>
+        <br>
+
+        <h2>Compare Years</h2>  
+        <div>
+            <p>Secondary Year</p>
+            <select id="secondselect" class="second"></select>
+            <br>
+            <button onclick="compare()">Compare Years</button>
+        </div>
+        <br>
+
+        <h2>Risk By Country</h2>
+        <p>Show your risk of being impacted by an earthquake based on your country.</p>
+        <button id="heatmap" onclick="heatMapButton()">Show Heatmap</button>
+
+
+
+        <script type="text/javascript">
+        	var width = 1000;
+        	var height = 500;
+            var plates = false;
+
+            makeToolTip();
+
+            async function heatMapButton() {
+                pauseAnimation()
+                await clearMap();
+                let legend = d3.select('svg').select('g.legend')
+                
+                legend.selectAll('rect').remove()
+                legend.selectAll('text').remove()
+                d3.csv("earthquakes.csv", drawHeatmap);
+                
+                printPaths();
+            }
+
+            function drawHeatmap(error, earthquakes) {
+
+                d3.json("map.json", buildMapH);
+                
+                function buildMapH(error, countries) {
+					var width = 1000;
+					var height = 500;
+
+                    var svg = d3.select('svg')
+					var projection = d3.geoEquirectangular()
+						.fitExtent([[0,0], [width, height]], countries);
+                    
+
+					drawWorld(projection, countries);
+					
+                    //overTime(svg, "08/17/2000", earthquakes, projection)
+                    //fullYear(svg, 1998, earthquakes, projection);
+					allTime(svg, 1998, earthquakes, projection);
+					makeHeatMapLegend();
+                	//printData(earthquakes);
+				}
+                
+			}
+            
+
+            function resumeAnimation(){
+                resA();
+                d3.select("#pause").style("display", "");
+                d3.select("#resume").style("display", "none");
+                d3.csv("earthquakes.csv", animateVis);
+            }
+
+
+            async function clearMap(){
+                removeHeatmap()
+                var tran = d3.transition()
+							.duration(300);
+
+                let circles = d3.selectAll("circle")
+                
+                circles.transition(tran)
+                    .attr("r", 0)
+
+                const delay = async (ms = 300) => new Promise(resolve => setTimeout(resolve, ms))
+                await delay()
+                circles.remove()
+            }
+
+            async function newYear() {
+                
+                await clearMap();
+                drawYear();
+            }
+
+
+            d3.json("map.json", buildMap);
+            
+
+            
+            
+            
+            d3.csv("earthquakes.csv", buildDropdown)
+
+            function drawYear(){
+                pauseAnimation()
+                clearMap();
+                let legend = d3.select('svg').select('g.legend')
+                
+                legend.selectAll('rect').remove()
+                legend.selectAll('text').remove()
+
+                makeYearLegend()
+        	    d3.csv("earthquakes.csv", drawVis);
+            }
+
+            function compare(){
+                pauseAnimation()
+                let legend = d3.select('svg').select('g.legend')
+                
+                legend.selectAll('rect').remove()
+                legend.selectAll('text').remove()
+
+                makeCompareLegened()
+                d3.csv("earthquakes.csv", drawCompare);
+            }
+
+            async function animateYear(){
+                let legend = d3.select('svg').select('g.legend')
+                
+                legend.selectAll('rect').remove()
+                legend.selectAll('text').remove()
+
+                makeAnimationLegend();
+                resetAnimation();
+                await clearMap()
+                d3.csv("earthquakes.csv", animateVis);
+            }
+
+            function printAll(){
+                resetAnimation();
+                d3.csv("earthquakes.csv", allTime);
+            }
+
+
+        	
+
+        </script>
 
 	</body>
 </html>
