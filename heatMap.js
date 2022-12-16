@@ -52,5 +52,6 @@ function removeHeatmap(){
     var paths = svg.selectAll("path");
     for(let i = 0; i < paths._groups[0].length; i++){
         paths._groups[0][i].style.fill = "white";
+        paths._groups[0][i].style.fillOpacity = "0%";
     }
 }
