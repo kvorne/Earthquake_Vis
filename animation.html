@@ -8,6 +8,8 @@
         <script src="data_filter.js"></script>
         <script src="animations.js"></script>
         <script src="drawfunc.js"></script>
+        <script src="heatMap.js"></script>
+        
 
 		<style>
 			h1 {
@@ -36,7 +38,7 @@
 	<body>
         <h1>Earthquake Vis Animation</h1>
         <p id="date"></p>
-		<svg width="1200" height="500">
+		<svg width="1200" height="500" id="svg">
             <g class="map"></g>
             <g class="legend"></g>
 		</svg>
@@ -63,6 +65,8 @@
         <br>
         <button id="showPlates" onclick="showPlates()">Show Tectonic Plates</button>
         <button id="showMap" onclick="showMap()">Show World Map</button>
+        <br>
+        <button id="heatmap" onclick="heatMapButton()">Heatmap</button>
 
 		<p><a href="/index.html">Home</a></p>
 
@@ -74,6 +78,42 @@
             var plates = false;
 
             makeToolTip();
+
+            async function heatMapButton() {
+                pauseAnimation()
+                await clearMap();
+                let legend = d3.select('svg').select('g.legend')
+                
+                legend.selectAll('rect').remove()
+                legend.selectAll('text').remove()
+                d3.csv("earthquakes.csv", drawHeatmap);
+                
+                printPaths();
+            }
+
+            function drawHeatmap(error, earthquakes) {
+                d3.json("map.json", buildMapH);
+                
+                function buildMapH(error, countries) {
+					var width = 1000;
+					var height = 500;
+
+					var projection = d3.geoEquirectangular()
+						.fitExtent([[0,0], [width, height]], countries);
+					
+					var svg = d3.select('svg')
+                    
+
+					drawWorld(projection, countries);
+					
+                    //overTime(svg, "08/17/2000", earthquakes, projection)
+                    //fullYear(svg, 1998, earthquakes, projection);
+					allTime(svg, 1998, earthquakes, projection);
+					makeHeatMapLegend();
+                	//printData(earthquakes);
+				}
+                
+			}
             
 
             function resumeAnimation(){
@@ -85,6 +125,7 @@
 
 
             async function clearMap(){
+                removeHeatmap()
                 var tran = d3.transition()
 							.duration(300);
 
@@ -99,6 +140,7 @@
             }
 
             async function newYear() {
+                
                 await clearMap();
                 drawYear();
             }
@@ -113,6 +155,8 @@
             d3.csv("earthquakes.csv", buildDropdown)
 
             function drawYear(){
+                pauseAnimation()
+                clearMap();
                 let legend = d3.select('svg').select('g.legend')
                 
                 legend.selectAll('rect').remove()
@@ -123,6 +167,7 @@
             }
 
             function compare(){
+                pauseAnimation()
                 let legend = d3.select('svg').select('g.legend')
                 
                 legend.selectAll('rect').remove()
