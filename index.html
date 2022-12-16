@@ -43,6 +43,11 @@
             <g class="legend"></g>
 		</svg>
         <br>
+        <h2>Risk By Country</h2>
+        <p>Show your risk of being impacted by an earthquake based on your country.</p>
+        <button id="heatmap" onclick="heatMapButton()">Show Heatmap</button>
+        <br>
+        
         <h2>Configure Year</h2>
         <div>
             <p>Choose Year</p>
@@ -71,10 +76,6 @@
         </div>
         <br>
 
-        <h2>Risk By Country</h2>
-        <p>Show your risk of being impacted by an earthquake based on your country.</p>
-        <button id="heatmap" onclick="heatMapButton()">Show Heatmap</button>
-
 
 
         <script type="text/javascript">
@@ -85,6 +86,13 @@
             makeToolTip();
 
             async function heatMapButton() {
+                // var svg = d3.select('svg')
+                // var paths = svg.selectAll("path");
+                // console.log(paths)
+                // for(let i = 0; i < paths._groups[0].length; i++){
+                //         console.log(paths._groups[0][i])
+                //         paths._groups[0][i].remove()
+                // }
                 pauseAnimation()
                 await clearMap();
                 let legend = d3.select('svg').select('g.legend')
